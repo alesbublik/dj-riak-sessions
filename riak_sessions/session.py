@@ -50,6 +50,8 @@ class SessionStore(SessionBase):
         if session_key is None:
             if self.session_key is None:
                 return
+            session_key = self.session_key
+
         session_data = self.sessions.get(session_key)
         if session_data.exists():
             session_data.delete()
