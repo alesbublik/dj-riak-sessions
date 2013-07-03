@@ -63,3 +63,16 @@ class SessionStore(SessionBase):
         else:
             self.create()
             return {}
+
+    @classmethod
+    def clear_expired(cls):
+        client = RiakClient(host=RIAK_DB_HOST,
+                            port=RIAK_DB_PORT,
+                            transport_class=RiakPbcTransport)
+        sessions = client.bucket(RIAK_DB_BUCKET)
+
+        now = int(timezone.now().strftime("%s"))
+        for key in sessions.get_keys():
+            data = sessions.get(key)
+            if int(data.get_usermeta()['expire_age']) < now:
+                data.delete()
