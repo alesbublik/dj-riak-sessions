@@ -11,6 +11,7 @@ except ImportError:
 
 
 RIAK_DB_HOST = getattr(settings, 'RIAK_DB_HOST', '127.0.0.1')
+# TODO: pbc_port
 RIAK_DB_PORT = getattr(settings, 'RIAK_DB_PORT', 8087)
 RIAK_DB_BUCKET = getattr(settings, 'RIAK_DB_BUCKET', 'djsessions')
 
@@ -66,6 +67,7 @@ class SessionStore(SessionBase):
 
     @classmethod
     def clear_expired(cls):
+        # TODO: get_keys() method is not efficent operation for searching sessions, use search feature or mapreduce or ...
         client = RiakClient(host=RIAK_DB_HOST,
                             port=RIAK_DB_PORT,
                             transport_class=RiakPbcTransport)
